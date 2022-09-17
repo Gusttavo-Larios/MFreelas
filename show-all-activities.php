@@ -34,19 +34,22 @@
                     <div class="box-activities">
                         <?php
                         require_once "repository/ActivityRepository.php";
-                        require_once "services/ActivitySevices.php";
+                        require_once "services/ActivityServices.php";
+                        session_start();
+                        session_destroy();
 
                         $activities = ActivityRepository::getAllActivities();
 
-                        $i = 0;
-                        while ($i < count($activities)) {
+                        for ($i = 0; $i < count($activities); $i++) {
                             $row = $activities[$i];
                             $date = date_create($row["date_time"]);
                             $formattedDateTime = date_format($date, "d/m/Y H:i:s");
                             $arrayDateTime = explode(" ", $formattedDateTime);
+
                             $remunaration = ActivitySevices::calculateRemuneration($row["value_hour"], $row["date_time"]);
 
                             echo '
+                            <a href="show-activity.php?id=' . $row["id"] . '">
                             <div class="container-activities">
                             <div class="d-flex flex-column">
                                 <span class="title-activity">
@@ -58,8 +61,8 @@
                             </div>
                             <div class="value-activity">R$' . $remunaration . '</div>
                         </div>
+                        </a>
                             ';
-                            $i++;
                         }
                         ?>
                     </div>

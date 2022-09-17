@@ -12,7 +12,17 @@ class ActivityRepository extends RecursiveIteratorIterator
         $stmt = $connection->prepare($sql);
         $stmt->execute();
 
-        // $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $connection = null;
+        return $stmt->fetchAll();
+    }
+
+    static function getActivity($id)
+    {
+        $connection = Database::connect();
+        $sql = "SELECT * FROM activity WHERE id=" . $id . ";";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute();
+
         $connection = null;
         return $stmt->fetchAll();
     }
@@ -30,7 +40,6 @@ class ActivityRepository extends RecursiveIteratorIterator
             $value_per_hour = (float) $value_hour;
 
             $query_prepare->bindParam(':title', $title);
-            var_dump($value_per_hour);
             $query_prepare->bindParam(':value_hour', $value_per_hour);
             $query_prepare->bindParam(':date_time', $current_date_time);
 
@@ -39,5 +48,17 @@ class ActivityRepository extends RecursiveIteratorIterator
             echo "<br>" . $query . "<br>" . $e->getMessage();
         }
         $connection = null;
+    }
+
+    static function deleteActivity($id)
+    {
+        try {
+            $connection = Database::connect();
+            $query = "DELETE FROM activity WHERE id = " . $id . ";";
+            $connection->exec($query);
+            $connection = null;
+        } catch (PDOException $e) {
+            echo "<br>" . $query . "<br>" . $e->getMessage();
+        }
     }
 }

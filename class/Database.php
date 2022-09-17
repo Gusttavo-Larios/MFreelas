@@ -4,12 +4,13 @@ class Database
 {
     static function connect()
     {
-        $serverName = "";
-        $userName = "";
-        $password = "";
+        $serverName = "serverName";
+        $userName = "userName";
+        $password = "password";
+        $dbname = "dbname";
 
         try {
-            $connection = new PDO("mysql:host=$serverName;dbname=", $userName, $password);
+            $connection = new PDO("mysql:host=$serverName;dbname=$dbname", $userName, $password);
 
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
